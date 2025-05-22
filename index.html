@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brain Dee</title>
+  
+  <!-- Comfortable font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* --- Calm color palette --- */
+    :root {
+      --color-primary: #0d585f;
+      --color-secondary: #9ccdc1;
+      --color-accent: #63a6a0;
+      --color-bg: #e4f1e1;
+      --color-text: #333;
+      --color-error: #e57373;
+      --color-success: #81c784;
+      --transition-time: 0.3s;
+    }
+
+    /* --- Reset and base styles --- */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: var(--color-primary);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+    
+
+    nav {
+      background-color: var(--color-secondary);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.75rem 0;
+      font-weight: 700;
+      font-size: 1.1rem;
+      user-select: none;
+    }
+    nav a {
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: transform var(--transition-time);
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+    nav a:hover,
+    nav a:focus {
+      background-color: var(--color-accent);
+      color: white;
+      transform: scale(1.1);
+      outline: none;
+    }
+
+    main {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      width: 100%;
+    }
+
+    section {
+      background-color: white;
+      padding: 1.8rem 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-weight: 700;
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* --- Dice game styles --- */
+    .dice-row {
+      display: flex;
+      justify-content: space-around;
+      margin: 1.5rem 0;
+    }
+    .dice {
+      width: 70px;
+      height: 70px;
+      font-size: 2.8rem;
+      background: rgb(255, 255, 255);
+      border-radius: 15px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      cursor: default;
+      transition: transform 0.2s ease;
+    }
+    .dice:active {
+      transform: scale(0.9);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    input[type=number] {
+      width: 90px;
+      font-size: 1.3rem;
+      padding: 0.5rem 0.8rem;
+      border: 2px solid var(--color-primary);
+      border-radius: 8px;
+      margin-right: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    input[type=number]:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 5px var(--color-accent);
+    }
+
+    button {
+      background-color: var(--color-accent);
+      border: none;
+      padding: 0.6rem 1.3rem;
+      font-size: 1.1rem;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s ease, transform 0.15s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: var(--color-primary);
+      transform: scale(1.05);
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .result {
+      margin-top: 1.2rem;
+      font-weight: 700;
+      font-size: 1.25rem;
+      user-select: none;
+      min-height: 1.5em;
+      color: var(--color-text);
+    }
+    .result.correct {
+      color: var(--color-success);
+    }
+    .result.incorrect {
+      color: var(--color-error);
+    }
+
+    /* --- Community post styles --- */
+    form.post-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    form.post-form label {
+      font-weight: 600;
+    }
+
+    form.post-form textarea {
+      resize: vertical;
+      min-height: 120px;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border: 2px solid var(--color-primary);
+      border-radius: 10px;
+      font-family: 'Roboto', sans-serif;
+      transition: border-color 0.3s ease;
+    }
+    form.post-form textarea:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 6px var(--color-accent);
+    }
+
+    #postList .post {
+      background: var(--color-secondary);
+      padding: 1rem 1.2rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+      font-size: 1.1rem;
+      color: var(--color-primary);
+    }
+
+    /* --- Smooth scroll for internal links --- */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 480px) {
+      .dice {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+      }
+
+      input[type=number] {
+        width: 70px;
+        font-size: 1rem;
+      }
+    }
+    /* Motion on scroll */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.fade-in.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <img src="Logo BrainDee.png" alt="Brain Dee Logo" style="height: 250px;" />
+      <p>Brain Dee - Fun Brain Training for Seniors!</p>
+    </div>
+  </header>
+
+  
+<nav>
+  <a href="#game">Brain Game</a>
+  <a href="#community">Community</a>
+  <a href="#about">About</a>
+</nav>
+
+<main>
+  <!-- Brain game -->
+  <section id="game" class="dice-game">
+    <h2>🎲 Dice Sum</h2>
+    <div class="dice-row" id="diceRow" aria-label="Five dice"></div>
+    <div>
+      <input
+        type="number"
+        id="answer"
+        placeholder="Enter sum"
+        aria-label="Enter the sum of dice"
+      />
+      <button id="checkBtn">Check Answer</button>
+      <button id="rollBtn" style="margin-left: 10px;">Roll Dice 🎲</button>
+    </div>
+    <div id="result" class="result" aria-live="polite"></div>
+  </section>
+
+  <!-- Community posts -->
+  <section id="community" class="community-section">
+    <h2>💬 Community Sharing</h2>
+    <form id="postForm" class="post-form">
+      <label for="postContent">Share your thoughts or articles:</label>
+      <textarea id="postContent" placeholder="Type your message here..."></textarea>
+      <button type="submit">Post</button>
+    </form>
+    <div id="postList" aria-live="polite"></div>
+    <section id="game" class="dice-game fade-in"> ... </section>
+<section id="community" class="community-section fade-in"> ... </section>
+<section id="about" class="fade-in"> ... </section>
+  </section>
+  <section id="about">
+    <h2>📘 About Brain Dee</h2>
+    <p>
+      Brain Dee is a platform that supports mental health, most commonly found in the elderly,
+      by combining interactive games and small community spaces to share or talk.
+    </p>
+  </section>
+</main>
+
+<script>
+  let dice = [];
+
+  function rollDice() {
+    dice = Array.from({ length: 5 }, () => Math.floor(Math.random() * 6) + 1);
+    const diceRow = document.getElementById("diceRow");
+    diceRow.innerHTML = dice
+      .map((num) => `<div class="dice" aria-label="Dice showing ${num}">${num}</div>`)
+      .join("");
+    document.getElementById("result").textContent = "";
+    document.getElementById("answer").value = "";
+    document.getElementById("answer").focus();
+  }
+
+  function checkAnswer() {
+    const userAnswer = parseInt(document.getElementById("answer").value);
+    const sum = dice.reduce((a, b) => a + b, 0);
+    const result = document.getElementById("result");
+
+    if (isNaN(userAnswer)) {
+      result.textContent = "⚠️ Please enter a number before checking.";
+      result.className = "result incorrect";
+      return;
+    }
+
+    if (userAnswer === sum) {
+      result.textContent = "✅ Correct! Well done.";
+      result.className = "result correct";
+    } else {
+      result.textContent = `❌ Incorrect. The correct answer is ${sum}.`;
+      result.className = "result incorrect";
+    }
+  }
+
+  function addPost(event) {
+    event.preventDefault();
+    const content = document.getElementById("postContent").value.trim();
+    if (!content) return;
+
+    const postList = document.getElementById("postList");
+    const post = document.createElement("div");
+    post.className = "post";
+    post.textContent = content;
+    postList.prepend(post);
+
+    document.getElementById("postContent").value = "";
+  }
+
+  window.addEventListener("load", () => {
+    rollDice();
+
+    document.getElementById("checkBtn").addEventListener("click", checkAnswer);
+    document.getElementById("rollBtn").addEventListener("click", rollDice);
+    document.getElementById("postForm").addEventListener("submit", addPost);
+  });
+  // Intersection Observer for scroll animation
+const faders = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+      obs.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.1
+});
+
+faders.forEach(fadeEl => observer.observe(fadeEl));
+</script>
+
+</body>
+</html>
